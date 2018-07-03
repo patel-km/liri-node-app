@@ -26,29 +26,48 @@ function name() {
 }
 */
 
-
-/*
-request(long url..)
-*/
 var arg3 = process.argv.slice(3);
 
-// function songMe (arg3) {
-//     console.log('other argv is: ' + arg3);
-//     console.log("Artist(s): " + );
-//     console.log("Song: " +);
-//     console.log("Preview here: " + );
-//     console.log("Album: " + );
+function songMe (arg3) {
+
+  var queryUrl = "https://api.spotify.com/v1/search" + "q=track:" + arg3 + process.env.SPOTIFY_ID;
+
+  request(queryUrl, function(error, response, body) {
+    
+    console.log(body);
+
+    // If the request is successful
+    if (!error && response.statusCode === 200) {
+      // console.log('other argv is: ' + arg3);
+      console.log("Artist(s): " + body.artist.name);
+      console.log("Song: " + body.track.name);
+      console.log("Preview here: " + body.track.preview_url);
+      console.log("Album: " + body.album.name);
+
+    }
+  });
+}
+//     
 // }
 
 
-// function myTweets(){
+function myTweets(){
 
-//   // API doc
+  var name = process.argv[3];
 
-  
-//     console.log("TWEETS FUNCTION FIRED!-- put variable for showing those 20 tweets here");
-//     //show last 20 tweets and when they were created.
-// }
+  queryUrl = "https://api.twitter.com/1.1/statuses/user_timeline.json?" + name + "=twitterapi&count=20";
+
+  request(queryUrl, function(error, response, body) {
+
+    // If the request is successful
+    if (!error && response.statusCode === 200) {
+      //show last 20 tweets and when they were created
+      console.log(queryUrl);
+      console.log(response.created_at);
+      
+    }
+  });
+}
 
 
 function movieThis() {
@@ -57,12 +76,8 @@ function movieThis() {
 
   var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
 
-  console.log(queryUrl);
-
-
   request(queryUrl, function(error, response, body) {
 
-    // If the request is successful
     if (!error && response.statusCode === 200) {
 
       console.log("Title: " + JSON.parse(body).Title);
@@ -80,7 +95,7 @@ function movieThis() {
 
 
 
-
+// Switch which calls the functions as the user types in certain calls the command line.
 var userInput = process.argv[2];
 
 switch(userInput){
